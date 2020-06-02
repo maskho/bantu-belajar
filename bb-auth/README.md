@@ -5,7 +5,7 @@ API buat menangani profil user
 - Tetap logged-in meskipun app di-close atau di-refresh 
 
 Technology Stack:
--Database: MongoDB Atlas
--Server: Node.js & Express
--Authentication & Authorization: Passport + JWT (jsonwebtoken)
--Password security: bcrypt(buat hash password sebelum disimpan di db)
+- Database: MongoDB Atlas
+- Server: Node.js & Express
+- Authentication & Authorization: Passport + JWT (jsonwebtoken)
+- Password security: bcrypt(buat hash password sebelum disimpan di db)
