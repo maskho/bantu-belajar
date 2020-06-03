@@ -12,7 +12,7 @@ module.exports = {
     lokasi: { type: Text, isRequired: true },
     tgl_gabung: { type: DateTime, isRequired: true },
     deskripsi: { type: Text, isRequired: true },
-    logo: {
+    ikon: {
       type: File,
       adapter: fileAdapter,
       hooks: {
