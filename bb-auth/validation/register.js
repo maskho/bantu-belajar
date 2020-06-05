@@ -6,11 +6,18 @@ module.exports = function validateRegisterInput(data) {
 
   //ubah field kosong menjadi string kosong agar bisa pake
   //function validator
+  data.firstname = !isEmpty(data.firstname) ? data.firstname : "";
   data.email = !isEmpty(data.email) ? data.email : "";
   data.password = !isEmpty(data.password) ? data.password : "";
   data.confirmPassword = !isEmpty(data.confirmPassword)
     ? data.confirmPassword
     : "";
+
+  //validasi nama depan
+  if (Validator.isEmpty(data.firstname)) {
+    errors.firstname =
+      "Nama harap diisi, jika hanya terdiri 1 kata tulis di kolom nama depan";
+  }
   //validasi email
   if (Validator.isEmpty(data.email)) {
     errors.email = "Email harap diisi";
