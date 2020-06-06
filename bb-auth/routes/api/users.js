@@ -5,9 +5,12 @@ const jwt = require("jsonwebtoken");
 const keys = require("../../config/keys");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
-// const xoauth2 = require("xoauth2");
-//const SMTPConnection = require("nodemailer/lib/smtp-connection");
+const validateRegisterInput = require("../../validation/register");
+const validateLoginInput = require("../../validation/login");
+const User = require("../../models/User");
 
+//membuat transporter untuk mengirim email via gmail
+//setting gmail less secure app dulu. minusnya email yg dikirim masuk spam
 let transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -16,15 +19,8 @@ let transporter = nodemailer.createTransport({
   },
 });
 
-//load validasi input
-const validateRegisterInput = require("../../validation/register");
-const validateLoginInput = require("../../validation/login");
-//load model user
-const User = require("../../models/User");
-
 //@route POST api/users/register
-//@desc Register user
-//@access Public
+//@desc untuk register user baru
 router.post("/register", (req, res) => {
   console.log(req.body);
   //validasi isian input
@@ -61,7 +57,6 @@ router.post("/register", (req, res) => {
 
 //@route POST api/users/login
 //@desc Login user -> return JWT token
-//@access Public
 router.post("/login", (req, res) => {
   //validasi input
   const { errors, isValid } = validateLoginInput(req.body);
@@ -75,7 +70,7 @@ router.post("/login", (req, res) => {
   //cari database user via email
   User.findOne({ email }).then((user) => {
     if (!user) {
-      return res.status(404).json({ emailnotfound: "Email tidak ditemukan" });
+      return res.status(404).json({ emailnotfound: "Email tidak ditemukan." });
     }
     //cek password
     bcrypt.compare(password, user.password).then((isMatch) => {
@@ -84,14 +79,14 @@ router.post("/login", (req, res) => {
         //bikin JWT payload
         const payload = {
           id: user.id,
-          email: user.email,
+          firstname: user.firstname,
         };
         //sign token
         jwt.sign(
           payload,
           keys.secretOrKey,
           {
-            expiresIn: 2592997, //1 bulan
+            expiresIn: 2592997, //kadaluarsa dalam 1 bulan
           },
           (err, token) => {
             res.json({
@@ -108,8 +103,7 @@ router.post("/login", (req, res) => {
 });
 
 //@route POST api/users/forgotpassword
-//@desc lupa password -> kirim email ama token
-//@access Public
+//@desc lupa password -> kirim email n token
 router.post("/forgotpassword", (req, res) => {
   const email = req.body.email;
 
@@ -121,12 +115,13 @@ router.post("/forgotpassword", (req, res) => {
     if (!user) {
       return res.status(404).json({ emailnotfound: "Email tidak ditemukan" });
     } else {
+      //membuat token untuk reset password
       const token = crypto.randomBytes(20).toString("hex");
       user.update({
         resetPasswordToken: token,
-        resetPasswordExpires: Date.now() + 86400, //1 hari
+        resetPasswordExpires: Date.now() + 86400, //kadaluarsa dalam 1 hari
       });
-
+      //membuat template email
       const mailOptions = {
         from: "BantuBelajar97@gmail.com",
         to: { email },
@@ -138,8 +133,7 @@ router.post("/forgotpassword", (req, res) => {
           { token } +
           "\n\nJika anda merasa tidak melakukan permintaan ini, harap abaikan pesan ini dan password anda akan tetap sama seperti sebelumnya.",
       };
-      // console.log("mengirim email...");
-
+      //mengirim email lewat transporter
       transporter.sendMail(mailOptions, (err, res) => {
         if (err) {
           console.error("terjadi kesalahan: ", err);
@@ -151,9 +145,9 @@ router.post("/forgotpassword", (req, res) => {
     }
   });
 });
+
 //@route GET api/users/reset
-//@desc reset password -> cek kadaluarsa
-//@access Public
+//@desc reset password -> cek kadaluarsa token
 router.get("/reset", (req, res, next) => {
   User.findOne({
     $where: {
@@ -174,9 +168,9 @@ router.get("/reset", (req, res, next) => {
     }
   });
 });
+
 //@route PUT api/users/updatepassword
 //@desc update password baru
-//@access Public
 router.put("/updatepassword", (req, res, next) => {
   User.findOne({
     $where: {
