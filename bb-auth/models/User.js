@@ -9,7 +9,7 @@ const UserSchema = new Schema({
   password: { type: String, required: true },
   date: { type: Date, default: Date.now },
   isVerified: { type: Boolean, default: false },
-  passwordResetToken: { type: String },
-  passwordResetExpires: { type: Date },
+  resetPasswordToken: { type: String, default: null },
+  verificationToken: { type: String, default: null },
 });
 module.exports = User = mongoose.model("users", UserSchema);
