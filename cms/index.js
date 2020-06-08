@@ -4,7 +4,7 @@ const { Text, Checkbox, Password } = require("@keystonejs/fields");
 const { GraphQLApp } = require("@keystonejs/app-graphql");
 const { AdminUIApp } = require("@keystonejs/app-admin-ui");
 
-const initialiseData = require("./initial-data");
+//const initialiseData = require("./initial-data");
 const ArticleSchema = require("./lists/Article");
 const ProjectSchema = require("./lists/Project");
 const CampaignerSchema = require("./lists/Campaigner");
@@ -23,7 +23,7 @@ const adapterConfig = {
 const keystone = new Keystone({
   name: PROJECT_NAME,
   adapter: new Adapter(adapterConfig),
-  onConnect: process.env.CREATE_TABLES !== "true" && initialiseData,
+  onConnect: process.env.CREATE_TABLES !== "true",
   cookie: {
     secure: true,
   },
