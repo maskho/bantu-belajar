@@ -97,9 +97,9 @@ module.exports = {
   apps: [
     new GraphQLApp(),
     new AdminUIApp({
+      hooks: require.resolve("./components/logo"),
       enableDefaultRoute: true,
       authStrategy,
-      hooks: require.resolve("./components/logo"),
     }),
   ],
   configureExpress: (app) => {
