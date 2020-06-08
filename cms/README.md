@@ -1,3 +1,15 @@
+# CMS BANTU BELAJAR
+
+Menggunakan Framework KeystoneJS
+Fitur:
+
+- CRUD Proyek Donasi (Projects)
+- CRUD Penggalang Donasi (Campaigners)
+- CRUD Berita (Articles)
+- CRUD Lokasi Proyek (Locations)
+- CRUD Kategori Proyek (Category)
+- CRUD Foto-Foto untuk Proyek maupun Berita (Pictures)
+
 # KeystoneJS Starter Template
 
 You've created a KeystoneJS project! This project contains a simple list of users and an admin application (`localhost:3000/admin`) with basic authentication.

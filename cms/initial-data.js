@@ -32,13 +32,5 @@ module.exports = async (keystone) => {
         },
       }
     );
-
-    console.log(`
-
-User created:
-  email: ${email}
-  password: ${password}
-Please change these details after initial login.
-`);
   }
 };
