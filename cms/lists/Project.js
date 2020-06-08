@@ -2,19 +2,14 @@ const {
   Text,
   CalendarDay,
   Relationship,
-  CloudinaryImage,
   File,
+  Decimal,
 } = require("@keystonejs/fields");
+const { Wysiwyg } = require("@keystonejs/fields-wysiwyg-tinymce");
 const { CloudinaryAdapter } = require("@keystonejs/file-adapters");
 
 require("dotenv").config();
 
-const adapter = new CloudinaryAdapter({
-  cloudName: process.env.CLOUDINARY_CLOUD_NAME,
-  apiKey: process.env.CLOUDINARY_KEY,
-  apiSecret: process.env.CLOUDINARY_SECRET,
-  folder: "bbprojectimages",
-});
 const fileAdapter = new CloudinaryAdapter({
   cloudName: process.env.CLOUDINARY_CLOUD_NAME,
   apiKey: process.env.CLOUDINARY_KEY,
@@ -29,15 +24,15 @@ module.exports = {
       isRequired: true,
     },
     gambar: {
-      type: CloudinaryImage,
-      adapter,
+      type: Relationship,
+      ref: "Picture",
     },
     proposal: {
       type: File,
       adapter: fileAdapter,
     },
     deskripsi: {
-      type: Text,
+      type: Wysiwyg,
       isRequired: true,
     },
     lokasi: {
@@ -51,18 +46,20 @@ module.exports = {
       isRequired: true,
     },
     dana_terkumpul: {
-      type: Text,
+      type: Decimal,
+      isRequired: true,
     },
     dana_target: {
-      type: Text,
+      type: Decimal,
+      isRequired: true,
     },
     tgl_target: {
       type: CalendarDay,
-      format: "Do MMMM YYYY",
+      format: "DD MMMM YYYY",
       yearRangeFrom: "2020",
-      yearRangeTo: "2030",
-      isRequired: false,
-      defaultValue: new Date().toISOString("YYYY-MM-DD").substring(0, 10),
+      yearRangeTo: "2050",
+      isRequired: true,
+      defaultValue: new Date().toISOString("DD-MM-YYYY").substring(0, 10),
     },
     penggalang: {
       type: Relationship,

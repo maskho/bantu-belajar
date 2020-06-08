@@ -3,12 +3,14 @@ const { PasswordAuthStrategy } = require("@keystonejs/auth-password");
 const { Text, Checkbox, Password } = require("@keystonejs/fields");
 const { GraphQLApp } = require("@keystonejs/app-graphql");
 const { AdminUIApp } = require("@keystonejs/app-admin-ui");
+
 const initialiseData = require("./initial-data");
 const ArticleSchema = require("./lists/Article");
 const ProjectSchema = require("./lists/Project");
 const CampaignerSchema = require("./lists/Campaigner");
 const CategorySchema = require("./lists/Category");
 const LocationSchema = require("./lists/Location");
+const PictureSchema = require("./lists/Picture");
 
 const { MongooseAdapter: Adapter } = require("@keystonejs/adapter-mongoose");
 
@@ -84,6 +86,7 @@ keystone.createList("Project", ProjectSchema);
 keystone.createList("Campaigner", CampaignerSchema);
 keystone.createList("Category", CategorySchema);
 keystone.createList("Location", LocationSchema);
+keystone.createList("Picture", PictureSchema);
 
 module.exports = {
   keystone,

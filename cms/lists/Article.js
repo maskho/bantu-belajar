@@ -1,4 +1,5 @@
-const { Text, CalendarDay } = require("@keystonejs/fields");
+const { Text, CalendarDay, Relationship } = require("@keystonejs/fields");
+const { Wysiwyg } = require("@keystonejs/fields-wysiwyg-tinymce");
 
 module.exports = {
   fields: {
@@ -6,15 +7,15 @@ module.exports = {
       type: Text,
       isRequired: true,
     },
-    konten: { type: Text, isRequired: true },
-    gambar: { type: Text },
+    konten: { type: Wysiwyg, isRequired: true },
+    gambar: { type: Relationship, ref: "Picture" },
     tgl_terbit: {
       type: CalendarDay,
-      format: "Do MMMM YYYY",
-      yearRangeFrom: "2015",
-      yearRangeTo: "2021",
+      format: "DD MMMM YYYY",
+      yearRangeFrom: "2010",
+      yearRangeTo: "2025",
       isRequired: false,
-      defaultValue: new Date().toISOString("YYYY-MM-DD").substring(0, 10),
+      defaultValue: new Date().toISOString("DD-MM-YYYY").substring(0, 10),
     },
     sumber: { type: Text, isRequired: true },
   },

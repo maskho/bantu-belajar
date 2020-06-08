@@ -26,11 +26,11 @@ module.exports = {
     },
     tgl_gabung: {
       type: CalendarDay,
-      format: "Do MMMM YYYY",
+      format: "DD MMMM YYYY",
       yearRangeFrom: "2000",
       yearRangeTo: "2025",
       isRequired: true,
-      defaultValue: new Date().toISOString("YYYY-MM-DD").substring(0, 10),
+      defaultValue: new Date().toISOString("DD-MM-YYYY").substring(0, 10),
     },
     deskripsi: {
       type: Text,
