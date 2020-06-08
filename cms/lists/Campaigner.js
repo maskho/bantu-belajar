@@ -6,11 +6,11 @@ const {
 } = require("@keystonejs/fields");
 const { CloudinaryAdapter } = require("@keystonejs/file-adapters");
 
-require("dotenv").config();
+//require("dotenv").config();
 const adapter = new CloudinaryAdapter({
-  cloudName: process.env.CLOUDINARY_CLOUD_NAME,
-  apiKey: process.env.CLOUDINARY_KEY,
-  apiSecret: process.env.CLOUDINARY_SECRET,
+  cloudName: "dkazavkbg",
+  apiKey: "243347769785551",
+  apiSecret: "fM1ZmMMotBJyEgf3u3XpfxQhJik",
   folder: "bbcampaigners",
 });
 
