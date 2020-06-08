@@ -169,6 +169,7 @@ router.put("/updateverif", (req, res, next) => {
 
 //@route POST api/users/forgotpassword
 //@desc lupa password -> kirim email n token
+//error
 router.post("/forgotpassword", (req, res) => {
   const email = req.body.email;
 
