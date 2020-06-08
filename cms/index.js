@@ -23,7 +23,6 @@ const adapterConfig = {
 const keystone = new Keystone({
   name: PROJECT_NAME,
   adapter: new Adapter(adapterConfig),
-  onConnect: process.env.CREATE_TABLES !== "true",
   cookie: {
     secure: true,
   },
