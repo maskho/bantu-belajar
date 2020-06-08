@@ -99,6 +99,7 @@ module.exports = {
     new AdminUIApp({
       enableDefaultRoute: true,
       authStrategy,
+      hooks: require.resolve("./components/logo"),
     }),
   ],
   configureExpress: (app) => {
