@@ -9,6 +9,17 @@ const validateRegisterInput = require("../../validation/register");
 const validateLoginInput = require("../../validation/login");
 const User = require("../../models/User");
 
+// const domino = require("domino");
+// const { readFileSync } = require("fs");
+// const DIST_FOLDER = join(process.cwd(), "dist");
+// const template = readFileSync(
+//   join(DIST_FOLDER, "browser", "index.html")
+// ).toString();
+// const winObj = domino.createWindow(template);
+// global["window"] = winObj;
+// global["document"] = winObj.document;
+
+const API_URL = "https://authbb.herokuapp.com";
 //membuat transporter untuk mengirim email via gmail
 //setting gmail less secure app dulu. minusnya email yg dikirim masuk spam
 let transporter = nodemailer.createTransport({
@@ -18,7 +29,9 @@ let transporter = nodemailer.createTransport({
     pass: "belajarbantu97",
   },
 });
-
+router.get("/", (req, res) => {
+  res.status(200).json({ bantubelajar: "Hai lur, welcome to the jungle" });
+});
 //@route POST api/users/register
 //@desc untuk register user baru
 router.post("/register", (req, res) => {
@@ -50,6 +63,7 @@ router.post("/register", (req, res) => {
           let token = crypto.randomBytes(20).toString("hex");
           newUser.verificationToken = token;
           console.log(user);
+
           //membuat template email
           let recipient = JSON.stringify(newUser.email);
           const mailOptions = {
@@ -59,7 +73,8 @@ router.post("/register", (req, res) => {
             text:
               "Anda menerima email ini karena anda (atau mungkin orang lain) telah mendaftar Platform Bantu Belajar.\n" +
               "Harap klik link dibawah ini, atau salin link ini ke browser anda untuk melanjutkan proses:\n " +
-              "http:localhost:5000/verif/" +
+              API_URL +
+              "/api/users/verif/?verificationToken=" +
               token +
               "\n\nJika anda merasa tidak melakukan pendaftaran ini, harap abaikan pesan ini.",
           };
@@ -131,13 +146,16 @@ router.post("/login", (req, res) => {
 
 //@route GET api/users/verif
 //@desc reset password -> cek kadaluarsa token
-router.get("/verif", (req, res, next) => {
+router.get("/verif", (req, res) => {
+  //let params = new URL(document.location).searchParams;
+  let verificationToken = req.query.verificationToken;
   User.findOne({
-    verificationToken: req.body.verificationToken,
+    verificationToken,
   }).then((user) => {
-    if (user == null) {
-      console.log("Link verifikasi tidak valid");
-      res.json("Link verifikasi tidak valid");
+    if (!user) {
+      return res
+        .status(404)
+        .json({ verificationTokenNotFound: "Link verifikasi tidak valid" });
     } else {
       res.status(200).send({
         email: user.email,
@@ -149,20 +167,20 @@ router.get("/verif", (req, res, next) => {
 
 //@route PUT api/users/updateverif
 //@desc update password baru
-router.put("/updateverif", (req, res, next) => {
+router.put("/updateverif", (req, res) => {
   User.findOne({
     email: req.body.email,
   }).then((user) => {
-    if (user != null) {
-      console.log("user exists in db");
+    if (user) {
+      //console.log("user exists in db");
       user.isVerified = true;
-      verificationToken = "";
+      user.verificationToken = "";
       user.save();
-      console.log("telah terverifikasi");
-      res.status(200).send({ message: "telah terverifikasi" });
+      res.status(200).json({ message: "telah terverifikasi" });
     } else {
-      console.log("tidak ada user pada database untuk diverifikasi");
-      res.status(404).json("tidak ada user pada database untuk diverifikasi");
+      return res.status(404).json({
+        userNotFound: "tidak ada user pada database untuk diverifikasi",
+      });
     }
   });
 });
@@ -172,8 +190,7 @@ router.put("/updateverif", (req, res, next) => {
 //error
 router.post("/forgotpassword", (req, res) => {
   const email = req.body.email;
-
-  if (email === "") {
+  if (email == "") {
     res.status(400).send("email dibutuhkan");
   }
   console.error(email);
@@ -184,18 +201,18 @@ router.post("/forgotpassword", (req, res) => {
       //membuat token untuk reset password
       let token = crypto.randomBytes(20).toString("hex");
       user.resetPasswordToken = token;
-      user.save();
       console.log(user);
       //membuat template email
       let recipient = JSON.stringify(email);
       const mailOptions = {
-        from: "BantuBelajar97@gmail.com",
+        from: "Bantu@belajar.com",
         to: recipient,
         subject: "Link untuk Reset Password",
         text:
           "Anda menerima email ini karena anda (atau mungkin orang lain) berupaya meminta untuk reset password.\n" +
           "Harap klik link dibawah ini, atau salin link ini ke browser anda untuk melanjutkan proses:\n " +
-          "http:localhost:5000/reset/" +
+          API_URL +
+          "/api/users/reset/?resetPasswordToken=" +
           token +
           "\n\nJika anda merasa tidak melakukan permintaan ini, harap abaikan pesan ini dan password anda akan tetap sama seperti sebelumnya.",
       };
@@ -208,19 +225,25 @@ router.post("/forgotpassword", (req, res) => {
           res.status(200).json("recovery email terkirim");
         }
       });
+      user
+        .save()
+        .then((user) => res.json(user))
+        .catch((err) => console.log(err));
     }
   });
 });
 
 //@route GET api/users/reset
 //@desc reset password -> cek kadaluarsa token
-router.get("/reset", (req, res, next) => {
+router.get("/reset", (req, res) => {
   User.findOne({
-    resetPasswordToken: req.body.resetPasswordToken,
+    resetPasswordToken: req.query.resetPasswordToken,
   }).then((user) => {
-    if (user == null) {
+    if (!user) {
       console.log("password reset link tidak valid atau sudah kadaluarsa");
-      res.json("password reset link tidak valid atau sudah kadaluarsa");
+      res.json({
+        userNotFound: "password reset link tidak valid atau sudah kadaluarsa",
+      });
     } else {
       res.status(200).send({
         email: user.email,
@@ -232,24 +255,25 @@ router.get("/reset", (req, res, next) => {
 
 //@route PUT api/users/updatepassword
 //@desc update password baru
-router.put("/updatepassword", (req, res, next) => {
+router.put("/updatepassword", (req, res) => {
+  if (req.body.password == null)
+    res.status(200).json({ message: "harap isikan password" });
   User.findOne({
     email: req.body.email,
   }).then((user) => {
-    if (user != null) {
-      console.log("user exists in db");
+    if (user) {
       bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(req.body.password, salt).then((hashedPassword) => {
           user.password = hashedPassword;
           resetPasswordToken = "";
           user.save();
-          console.log("password diupdate");
-          res.status(200).send({ message: "password diupdate" });
+          res.status(200).json({ message: "password diupdate" });
         });
       });
     } else {
-      console.log("tidak ada user pada database untuk diupdate");
-      res.status(404).json("tidak ada user pada database untuk diupdate");
+      res
+        .status(404)
+        .json({ message: "tidak ada user pada database untuk diupdate" });
     }
   });
 });
