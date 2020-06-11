@@ -9,16 +9,6 @@ const validateRegisterInput = require("../../validation/register");
 const validateLoginInput = require("../../validation/login");
 const User = require("../../models/User");
 
-// const domino = require("domino");
-// const { readFileSync } = require("fs");
-// const DIST_FOLDER = join(process.cwd(), "dist");
-// const template = readFileSync(
-//   join(DIST_FOLDER, "browser", "index.html")
-// ).toString();
-// const winObj = domino.createWindow(template);
-// global["window"] = winObj;
-// global["document"] = winObj.document;
-
 const API_URL = "https://authbb.herokuapp.com";
 //membuat transporter untuk mengirim email via gmail
 //setting gmail less secure app dulu. minusnya email yg dikirim masuk spam
