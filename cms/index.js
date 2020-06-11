@@ -24,7 +24,7 @@ const keystone = new Keystone({
   name: PROJECT_NAME,
   adapter: new Adapter(adapterConfig),
   cookie: {
-    secure: true,
+    secure: false,
   },
   cookieSecret: "very-secret",
 });

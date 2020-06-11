@@ -1,0 +1,1 @@
+buat nyimpan sementara image
