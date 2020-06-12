@@ -67,5 +67,18 @@ router.put("/dana", (req, res) => {
     res.send(project);
   });
 });
+router.post("/detail", (req, res) => {
+  Campaigner.findById(req.body._id).then((proyek) => {
+    if (!proyek) res.send("tidak ada data proyek");
+    res.send(penggalang);
+  });
+});
+router.get("/", (req, res) => {
+  Project.find()
+    .sort({ _id: -1 })
+    .then((project) => {
+      res.json(project);
+    });
+});
 
 module.exports = router;
