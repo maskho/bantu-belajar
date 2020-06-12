@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const projects = require("./routes/api/projects");
+const campaigners = require("./routes/api/campaigners");
 const cors = require("cors");
 const app = express();
 
@@ -16,11 +17,12 @@ app.use(bodyParser.json());
 const db = require("./config/keys").mongoURI;
 
 mongoose
-  .connect(db, { useNewUrlParser: true })
+  .connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("MongoDB terhubung"))
   .catch((err) => console.log(err));
 
 app.use("/api/projects", projects);
+app.use("/api/campaigners", campaigners);
 var port = process.env.PORT || 4000;
 
 app.get("/", (req, res) => res.send("Halo lur"));

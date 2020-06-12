@@ -4,7 +4,6 @@ const keys = require("../../config/keys");
 
 const Project = require("../../models/Project");
 const { text } = require("express");
-const { isValidObjectId } = require("mongoose");
 
 //proyek donasi deadline paling mendekati akhir
 router.get("/featured", (req, res) => {
@@ -58,7 +57,15 @@ router.get("/program", (req, res) => {
       res.json(project);
     });
 });
-router.post("/penggalang", (req, res) => {
-  Project.findById(req.body._id);
+
+router.put("/dana", (req, res) => {
+  Project.findById(req.body._id).then((project) => {
+    if (!project) res.send("tidak ada proyek");
+    project.dana_terkumpul =
+      parseInt(project.dana_terkumpul) + parseInt(req.body.dana_masuk);
+    project.save();
+    res.send(project);
+  });
 });
-router.module.exports = router;
+
+module.exports = router;

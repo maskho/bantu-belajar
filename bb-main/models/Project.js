@@ -25,11 +25,11 @@ const ProjectSchema = new Schema({
     type: String,
   },
   dana_terkumpul: {
-    type: String,
+    type: Number,
     required: true,
   },
   dana_target: {
-    type: String,
+    type: Number,
     required: true,
   },
 
