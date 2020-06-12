@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const projects = require("./routes/api/projects");
 const campaigners = require("./routes/api/campaigners");
+const articles = require("./routes/api/articles");
 const cors = require("cors");
 const app = express();
 
@@ -23,6 +24,7 @@ mongoose
 
 app.use("/api/projects", projects);
 app.use("/api/campaigners", campaigners);
+app.use("/api/articles", articles);
 var port = process.env.PORT || 4000;
 
 app.get("/", (req, res) => res.send("Halo lur"));

@@ -15,6 +15,12 @@ const CampaignerSchema = new Schema({
   deskripsi: {
     type: String,
   },
+  foto_profil: {
+    type: String,
+  },
+  proyek: {
+    type: String,
+  },
 });
 
 module.exports = Campaigner = mongoose.model("campaigner", CampaignerSchema);
