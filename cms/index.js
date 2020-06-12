@@ -8,8 +8,6 @@ const { AdminUIApp } = require("@keystonejs/app-admin-ui");
 const ArticleSchema = require("./lists/Article");
 const ProjectSchema = require("./lists/Project");
 const CampaignerSchema = require("./lists/Campaigner");
-const CategorySchema = require("./lists/Category");
-const LocationSchema = require("./lists/Location");
 const PictureSchema = require("./lists/Picture");
 
 const { MongooseAdapter: Adapter } = require("@keystonejs/adapter-mongoose");
@@ -87,8 +85,6 @@ const authStrategy = keystone.createAuthStrategy({
 keystone.createList("Article", ArticleSchema);
 keystone.createList("Project", ProjectSchema);
 keystone.createList("Campaigner", CampaignerSchema);
-keystone.createList("Category", CategorySchema);
-keystone.createList("Location", LocationSchema);
 keystone.createList("Picture", PictureSchema);
 
 module.exports = {

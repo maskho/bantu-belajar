@@ -4,6 +4,7 @@ const {
   Relationship,
   File,
   Decimal,
+  Select,
 } = require("@keystonejs/fields");
 const { Wysiwyg } = require("@keystonejs/fields-wysiwyg-tinymce");
 const { CloudinaryAdapter } = require("@keystonejs/file-adapters");
@@ -36,13 +37,14 @@ module.exports = {
       isRequired: true,
     },
     lokasi: {
-      type: Relationship,
-      ref: "Location.proyek",
+      type: Select,
+      options:
+        "Sleman, Bantul,Gunung_Kidul,Kulon_Progo,Yogyakarta,Magelang,Temanggung,Wonosobo,Kebumen,Purworejo",
       isRequired: true,
     },
     kategori: {
-      type: Relationship,
-      ref: "Category.proyek",
+      type: Select,
+      options: "bangunan,fasilitas,koleksi,program",
       isRequired: true,
     },
     dana_terkumpul: {
