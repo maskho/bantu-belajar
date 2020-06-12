@@ -70,7 +70,7 @@ router.put("/dana", (req, res) => {
 router.post("/detail", (req, res) => {
   Project.findById(req.body._id).then((proyek) => {
     if (!proyek) res.send("tidak ada data proyek");
-    res.send(penggalang);
+    res.send(proyek);
   });
 });
 router.get("/", (req, res) => {
