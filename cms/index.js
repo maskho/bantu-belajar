@@ -23,7 +23,7 @@ const adapterConfig = {
 const keystone = new Keystone({
   name: PROJECT_NAME,
   sessionStore: new MongoStore({
-    client: clientInstance,
+    url: "mongodb://localhost/my-app",
   }),
   adapter: new Adapter(adapterConfig),
   cookie: {
