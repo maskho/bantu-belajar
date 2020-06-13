@@ -25,7 +25,7 @@ const keystone = new Keystone({
   sessionStore: new MongoStore({ url: "mongodb://localhost/cms" }),
   adapter: new Adapter(adapterConfig),
   cookie: {
-    secure: process.env.NODE_ENV === "production",
+    secure: false,
     maxAge: 1000 * 60 * 60 * 24 * 30,
     sameSite: false,
   },
