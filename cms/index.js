@@ -4,6 +4,7 @@ const { Text, Checkbox, Password } = require("@keystonejs/fields");
 const { GraphQLApp } = require("@keystonejs/app-graphql");
 const { AdminUIApp } = require("@keystonejs/app-admin-ui");
 const expressSession = require("express-session");
+const sessionStore = require("sessionstore");
 const MongoStore = require("connect-mongo")(expressSession);
 
 //const initialiseData = require("./initial-data");
@@ -22,14 +23,10 @@ const adapterConfig = {
 
 const keystone = new Keystone({
   name: PROJECT_NAME,
-  sessionStore: new MongoStore({
-    url: "mongodb://localhost/my-app",
-  }),
+  sessionStore: sessionStore.createSessionStore(),
   adapter: new Adapter(adapterConfig),
   cookie: {
     secure: false,
-    maxAge: 1000 * 60 * 60 * 24 * 30,
-    sameSite: false,
   },
   cookieSecret: "very-secret",
 });
