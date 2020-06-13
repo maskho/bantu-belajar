@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const keys = require("../../config/keys");
-
+const mongoose = require("mongoose");
 const Project = require("../../models/Project");
-const { text } = require("express");
+const Campaigner = require("../../models/Campaigner");
+const TaskData = require("../../models/TaskData");
+const { text, query } = require("express");
 
 //proyek donasi deadline paling mendekati akhir
 router.get("/featured", (req, res) => {
@@ -30,9 +32,44 @@ router.post("/search", (req, res) => {
     });
 });
 router.get("/bangunan", (req, res) => {
-  Project.find({ kategori: "bangunan" })
+  Project
+    //.aggregate([
+    //   {
+    //     $lookup: {
+    //       from: "campaigners",
+    //       localField: "penggalang",
+    //       foreignField: "_id",
+    //       as: "gabungan",
+    //     },
+    //   },
+    //   {
+    //     $unwind: "$gabungan",
+    //   },
+    //   {
+    //     $match: {
+    //       "gabungan.kategori": "bangunan",
+    //     },
+    //   },
+    // ])
+    .find({ kategori: "bangunan" }, (err, data) => {
+      if (err) res.send(err);
+      data.forEach((element) => {
+        Campaigner.find({
+          _id: new mongoose.Types.ObjectId(element.penggalang),
+        });
+      });
+    })
     .sort({ _id: -1 })
+    // .exec((project) => {
+    //   //if () reject(new NotFoundException("ga temu"));
+    //   resolve(project);
+    // })
+    //.populate("penggalang")
     .then((project) => {
+      // Campaigner.find({ _id: project.penggalang }).then((penggalang) => {
+      //   console.log(penggalang);
+      //   res.json(penggalang);
+      // });
       res.json(project);
     });
 });
@@ -74,7 +111,14 @@ router.post("/detail", (req, res) => {
   });
 });
 router.get("/", (req, res) => {
-  Project.find()
+  //let lokasi = new Array();
+  let lokasi = req.query.lokasi;
+  let kategori = req.query.kategori;
+
+  Project.find({
+    lokasi: { $in: lokasi.split(",") },
+    kategori: { $in: kategori.split(",") },
+  })
     .sort({ _id: -1 })
     .then((project) => {
       res.json(project);

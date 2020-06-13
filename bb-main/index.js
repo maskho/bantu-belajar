@@ -22,8 +22,9 @@ mongoose
   .then(() => console.log("MongoDB terhubung"))
   .catch((err) => console.log(err));
 
-app.use("/api/projects", projects);
 app.use("/api/campaigners", campaigners);
+app.use("/api/projects", projects);
+
 app.use("/api/articles", articles);
 var port = process.env.PORT || 4000;
 

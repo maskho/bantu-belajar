@@ -15,5 +15,6 @@ const UserSchema = new Schema({
   isVerified: { type: Boolean, default: false },
   resetPasswordToken: { type: String, default: null },
   verificationToken: { type: String, default: null },
+  address: { type: String, default: null },
 });
 module.exports = User = mongoose.model("users", UserSchema);

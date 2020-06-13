@@ -80,6 +80,7 @@ router.put("/updateprofile", (req, res) => {
       let bio = req.body.bio;
       let dob = req.body.dob;
       let photo = req.body.photo;
+      let address = req.body.address;
       if (newemail) {
         user.email = newemail;
       }
@@ -100,6 +101,9 @@ router.put("/updateprofile", (req, res) => {
       }
       if (photo) {
         user.photo = photo;
+      }
+      if (address) {
+        user.address = address;
       }
       user.save();
       res.status(200).json({ message: "data user selesai diupdate" });

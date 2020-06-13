@@ -40,5 +40,8 @@ const ProjectSchema = new Schema({
   penggalang: {
     type: String,
   },
+  nama_penggalang: {
+    type: String,
+  },
 });
 module.exports = Project = mongoose.model("project", ProjectSchema);
