@@ -27,6 +27,8 @@
     "@keystonejs/keystone": "^9.0.0",
     "cross-env": "^7.0.0",
     "dotenv": "^8.2.0",
-    "keystone": "^4.2.1"
+    "keystone": "^4.2.1",
+    "express-session": "1.17.1",
+    "connect-mongo": "3.2.0"
   }
 }

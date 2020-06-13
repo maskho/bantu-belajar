@@ -3,6 +3,8 @@ const { PasswordAuthStrategy } = require("@keystonejs/auth-password");
 const { Text, Checkbox, Password } = require("@keystonejs/fields");
 const { GraphQLApp } = require("@keystonejs/app-graphql");
 const { AdminUIApp } = require("@keystonejs/app-admin-ui");
+const expressSession = require("express-session");
+const MongoStore = require("connect-mongo")(expressSession);
 
 //const initialiseData = require("./initial-data");
 const ArticleSchema = require("./lists/Article");
@@ -20,9 +22,12 @@ const adapterConfig = {
 
 const keystone = new Keystone({
   name: PROJECT_NAME,
+  sessionStore: new MongoStore({ url: "mongodb://localhost/cms" }),
   adapter: new Adapter(adapterConfig),
   cookie: {
-    secure: false,
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 1000 * 60 * 60 * 24 * 30,
+    sameSite: false,
   },
   cookieSecret: "very-secret",
 });
@@ -98,6 +103,6 @@ module.exports = {
     }),
   ],
   configureExpress: (app) => {
-    app.set("trust proxy", 1);
+    app.set("trust proxy", true);
   },
 };
