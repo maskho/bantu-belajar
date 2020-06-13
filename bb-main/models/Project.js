@@ -8,7 +8,8 @@ const ProjectSchema = new Schema({
     text: true,
   },
   gambar: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: "Picture",
   },
   proposal: {
     type: String,

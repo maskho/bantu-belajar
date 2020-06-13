@@ -25,6 +25,7 @@ mongoose
 module.exports = {
   Project: require("./models/Project"),
   Campaigner: require("./models/Campaigner"),
+  Picture: require("./models/Picture"),
 };
 
 app.use("/api/campaigners", campaigners);

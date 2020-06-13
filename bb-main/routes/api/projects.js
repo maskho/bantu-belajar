@@ -10,6 +10,8 @@ const { text, query } = require("express");
 //proyek donasi deadline paling mendekati akhir
 router.get("/featured", (req, res) => {
   Project.find()
+    .populate("penggalang")
+    .populate("gambar")
     .sort({ tgl_target: 1 })
     .then((project) => {
       res.json(project);
@@ -27,6 +29,7 @@ router.post("/search", (req, res) => {
     { score: { $meta: "textScore" } }
   )
     .populate("penggalang")
+    .populate("gambar")
     .sort({ score: { $meta: "textScore" } })
     .then((project) => {
       res.json(project);
@@ -38,6 +41,7 @@ router.post("/search", (req, res) => {
 router.get("/bangunan", (req, res) => {
   Project.find({ kategori: "bangunan" })
     .populate("penggalang")
+    .populate("gambar")
     .sort({ _id: -1 })
     .then((project) => {
       res.json(project);
@@ -49,6 +53,7 @@ router.get("/bangunan", (req, res) => {
 router.get("/fasilitas", (req, res) => {
   Project.find({ kategori: "fasilitas" })
     .populate("penggalang")
+    .populate("gambar")
     .sort({ _id: -1 })
     .then((project) => {
       res.json(project);
@@ -60,6 +65,7 @@ router.get("/fasilitas", (req, res) => {
 router.get("/koleksi", (req, res) => {
   Project.find({ kategori: "koleksi" })
     .populate("penggalang")
+    .populate("gambar")
     .sort({ _id: -1 })
     .then((project) => {
       res.json(project);
@@ -71,6 +77,7 @@ router.get("/koleksi", (req, res) => {
 router.get("/program", (req, res) => {
   Project.find({ kategori: "program" })
     .populate("penggalang")
+    .populate("gambar")
     .sort({ _id: -1 })
     .then((project) => {
       res.json(project);
@@ -96,6 +103,7 @@ router.put("/dana", (req, res) => {
 router.post("/detail", (req, res) => {
   Project.findById(req.body._id)
     .populate("penggalang")
+    .populate("gambar")
     .then((proyek) => {
       if (!proyek) res.send("tidak ada data proyek");
       res.send(proyek);
@@ -107,6 +115,7 @@ router.post("/detail", (req, res) => {
 router.get("/all", (req, res) => {
   Project.find()
     .populate("penggalang")
+    .populate("gambar")
     .sort({ _id: -1 })
     .then((project) => {
       res.json(project);
@@ -135,6 +144,7 @@ router.get("/", (req, res) => {
     kategori: { $in: kategori },
   })
     .populate("penggalang")
+    .populate("gambar")
     .sort({ _id: -1 })
     .then((project) => {
       res.json(project);
