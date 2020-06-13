@@ -19,96 +19,90 @@ router.get("/featured", (req, res) => {
 //proyek donasi search
 router.post("/search", (req, res) => {
   Project.createIndexes({
-    judul: text,
-    deskripsi: text,
+    judul: "text",
+    deskripsi: "text",
   });
   Project.find(
     { $text: { $search: req.body.search } },
     { score: { $meta: "textScore" } }
   )
+    .populate("penggalang")
     .sort({ score: { $meta: "textScore" } })
     .then((project) => {
       res.json(project);
+    })
+    .catch(function (err) {
+      res.json(err);
     });
 });
 router.get("/bangunan", (req, res) => {
-  Project
-    //.aggregate([
-    //   {
-    //     $lookup: {
-    //       from: "campaigners",
-    //       localField: "penggalang",
-    //       foreignField: "_id",
-    //       as: "gabungan",
-    //     },
-    //   },
-    //   {
-    //     $unwind: "$gabungan",
-    //   },
-    //   {
-    //     $match: {
-    //       "gabungan.kategori": "bangunan",
-    //     },
-    //   },
-    // ])
-    .find({ kategori: "bangunan" }, (err, data) => {
-      if (err) res.send(err);
-      data.forEach((element) => {
-        Campaigner.find({
-          _id: new mongoose.Types.ObjectId(element.penggalang),
-        });
-      });
-    })
+  Project.find({ kategori: "bangunan" })
+    .populate("penggalang")
     .sort({ _id: -1 })
-    // .exec((project) => {
-    //   //if () reject(new NotFoundException("ga temu"));
-    //   resolve(project);
-    // })
-    //.populate("penggalang")
     .then((project) => {
-      // Campaigner.find({ _id: project.penggalang }).then((penggalang) => {
-      //   console.log(penggalang);
-      //   res.json(penggalang);
-      // });
       res.json(project);
+    })
+    .catch(function (err) {
+      res.json(err);
     });
 });
 router.get("/fasilitas", (req, res) => {
   Project.find({ kategori: "fasilitas" })
+    .populate("penggalang")
     .sort({ _id: -1 })
     .then((project) => {
       res.json(project);
+    })
+    .catch(function (err) {
+      res.json(err);
     });
 });
 router.get("/koleksi", (req, res) => {
   Project.find({ kategori: "koleksi" })
+    .populate("penggalang")
     .sort({ _id: -1 })
     .then((project) => {
       res.json(project);
+    })
+    .catch(function (err) {
+      res.json(err);
     });
 });
 router.get("/program", (req, res) => {
   Project.find({ kategori: "program" })
+    .populate("penggalang")
     .sort({ _id: -1 })
     .then((project) => {
       res.json(project);
+    })
+    .catch(function (err) {
+      res.json(err);
     });
 });
 
 router.put("/dana", (req, res) => {
-  Project.findById(req.body._id).then((project) => {
-    if (!project) res.send("tidak ada proyek");
-    project.dana_terkumpul =
-      parseInt(project.dana_terkumpul) + parseInt(req.body.dana_masuk);
-    project.save();
-    res.send(project);
-  });
+  Project.findById(req.body._id)
+    .then((project) => {
+      if (!project) res.send("tidak ada proyek");
+      project.dana_terkumpul =
+        parseInt(project.dana_terkumpul) + parseInt(req.body.dana_masuk);
+      project.save();
+      res.send(project);
+    })
+    .catch(function (err) {
+      res.json(err);
+    });
 });
 router.post("/detail", (req, res) => {
-  Project.findById(req.body._id).then((proyek) => {
-    if (!proyek) res.send("tidak ada data proyek");
-    res.send(proyek);
-  });
+  Project.findById(req.body._id)
+    .populate("penggalang")
+    .then((proyek) => {
+      if (!proyek) res.send("tidak ada data proyek");
+      res.send(proyek);
+    })
+    .catch(function (err) {
+      res.json(err);
+    });
 });
 router.get("/", (req, res) => {
   //let lokasi = new Array();
@@ -119,9 +113,13 @@ router.get("/", (req, res) => {
     lokasi: { $in: lokasi.split(",") },
     kategori: { $in: kategori.split(",") },
   })
+    .populate("penggalang")
     .sort({ _id: -1 })
     .then((project) => {
       res.json(project);
+    })
+    .catch(function (err) {
+      res.json(err);
     });
 });
 

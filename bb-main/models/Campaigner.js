@@ -23,4 +23,4 @@ const CampaignerSchema = new Schema({
   },
 });
 
-module.exports = Campaigner = mongoose.model("campaigner", CampaignerSchema);
+module.exports = Campaigner = mongoose.model("Campaigner", CampaignerSchema);

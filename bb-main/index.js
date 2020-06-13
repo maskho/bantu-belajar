@@ -22,6 +22,11 @@ mongoose
   .then(() => console.log("MongoDB terhubung"))
   .catch((err) => console.log(err));
 
+module.exports = {
+  Project: require("./models/Project"),
+  Campaigner: require("./models/Campaigner"),
+};
+
 app.use("/api/campaigners", campaigners);
 app.use("/api/projects", projects);
 

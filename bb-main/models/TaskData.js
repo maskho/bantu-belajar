@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const ProjectSchema = new Schema({
+const TaskDataSchema = new Schema({
   judul: {
     type: String,
     required: true,
@@ -38,8 +38,30 @@ const ProjectSchema = new Schema({
     default: Date.now,
   },
   penggalang: {
-    type: Schema.Types.ObjectId,
-    ref: "Campaigner",
+    type: String,
+  },
+  nama_penggalang: {
+    type: String,
+  },
+  nama: {
+    type: String,
+    text: true,
+  },
+  alamat: {
+    type: String,
+  },
+  tgl_gabung: {
+    type: Date,
+  },
+  deskripsi: {
+    type: String,
+  },
+  foto_profil: {
+    type: String,
+  },
+  proyek: {
+    type: String,
   },
 });
-module.exports = Project = mongoose.model("Project", ProjectSchema);
+
+module.exports = TaskData = mongoose.model("taskdata", TaskDataSchema);
