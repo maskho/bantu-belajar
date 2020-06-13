@@ -104,14 +104,35 @@ router.post("/detail", (req, res) => {
       res.json(err);
     });
 });
+router.get("/all", (req, res) => {
+  Project.find()
+    .populate("penggalang")
+    .sort({ _id: -1 })
+    .then((project) => {
+      res.json(project);
+    })
+    .catch(function (err) {
+      res.json(err);
+    });
+});
 router.get("/", (req, res) => {
   //let lokasi = new Array();
   let lokasi = req.query.lokasi;
   let kategori = req.query.kategori;
 
+  if (!lokasi) {
+    lokasi = null;
+  } else {
+    lokasi = lokasi.split(",");
+  }
+  if (!kategori) {
+    kategori = null;
+  } else {
+    kategori = kategori.split(",");
+  }
   Project.find({
-    lokasi: { $in: lokasi.split(",") },
-    kategori: { $in: kategori.split(",") },
+    lokasi: { $in: lokasi },
+    kategori: { $in: kategori },
   })
     .populate("penggalang")
     .sort({ _id: -1 })
