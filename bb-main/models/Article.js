@@ -11,7 +11,8 @@ const ArticleSchema = new Schema({
     type: String,
   },
   gambar: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: "Picture",
   },
   tgl_terbit: {
     type: Date,

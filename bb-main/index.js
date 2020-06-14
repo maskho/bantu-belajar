@@ -26,6 +26,7 @@ module.exports = {
   Project: require("./models/Project"),
   Campaigner: require("./models/Campaigner"),
   Picture: require("./models/Picture"),
+  Article: require("./models/Article"),
 };
 
 app.use("/api/campaigners", campaigners);
