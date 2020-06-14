@@ -1,12 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const keys = require("../../config/keys");
-const mongoose = require("mongoose");
 const Project = require("../../models/Project");
 const Campaigner = require("../../models/Campaigner");
-const TaskData = require("../../models/TaskData");
 const { text, query } = require("express");
 
+//route: GET api/projects/featured
 //proyek donasi deadline paling mendekati akhir
 router.get("/featured", (req, res) => {
   Project.find()
@@ -18,6 +16,7 @@ router.get("/featured", (req, res) => {
     });
 });
 
+//route: POST api/projects/search
 //proyek donasi search
 router.post("/search", (req, res) => {
   Project.createIndexes({
@@ -38,6 +37,9 @@ router.post("/search", (req, res) => {
       res.json(err);
     });
 });
+
+//route: GET api/projects/bangunan
+//ambil data kategori bangunan
 router.get("/bangunan", (req, res) => {
   Project.find({ kategori: "bangunan" })
     .populate("penggalang")
@@ -50,6 +52,9 @@ router.get("/bangunan", (req, res) => {
       res.json(err);
     });
 });
+
+//route: GET api/projects/fasilitas
+//ambil data kategori fasilitas
 router.get("/fasilitas", (req, res) => {
   Project.find({ kategori: "fasilitas" })
     .populate("penggalang")
@@ -62,6 +67,9 @@ router.get("/fasilitas", (req, res) => {
       res.json(err);
     });
 });
+
+//route: GET api/projects/koleksi
+//ambil data kategori koleksi
 router.get("/koleksi", (req, res) => {
   Project.find({ kategori: "koleksi" })
     .populate("penggalang")
@@ -74,6 +82,9 @@ router.get("/koleksi", (req, res) => {
       res.json(err);
     });
 });
+
+//route:GET api/projects/program
+//ambil data kategori program
 router.get("/program", (req, res) => {
   Project.find({ kategori: "program" })
     .populate("penggalang")
@@ -87,6 +98,8 @@ router.get("/program", (req, res) => {
     });
 });
 
+//route: PUT api/projects/dana
+//update dana_terkumpul = dana_terkumpul + dana_masuk
 router.put("/dana", (req, res) => {
   Project.findById(req.body._id)
     .then((project) => {
@@ -100,6 +113,9 @@ router.put("/dana", (req, res) => {
       res.json(err);
     });
 });
+
+//route: POST api/projects/detail
+//kirim detail proyek berdasarkan _id
 router.post("/detail", (req, res) => {
   Project.findById(req.body._id)
     .populate("penggalang")
@@ -112,6 +128,9 @@ router.post("/detail", (req, res) => {
       res.json(err);
     });
 });
+
+//route: GET api/projects/all
+//ambil semua data proyek diambil dari yang terakhir diinput
 router.get("/all", (req, res) => {
   Project.find()
     .populate("penggalang")
@@ -124,8 +143,10 @@ router.get("/all", (req, res) => {
       res.json(err);
     });
 });
+
+//route: GET api/projects/
+//ambil data berdasarkan query params kategori dan lokasi
 router.get("/", (req, res) => {
-  //let lokasi = new Array();
   let lokasi = req.query.lokasi;
   let kategori = req.query.kategori;
 

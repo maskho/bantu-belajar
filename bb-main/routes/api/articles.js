@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const keys = require("../../config/keys");
-
 const Article = require("../../models/Article");
 
+//route: GET api/articles/
+//buat ambil semua data artikel diurutin dari terakhir diinput
 router.get("/", (req, res) => {
   Article.find()
     .populate("gambar")
@@ -15,6 +15,9 @@ router.get("/", (req, res) => {
       res.json(err);
     });
 });
+
+//route: POST api/articles/detail
+//buat ambil detail artikel dari _id
 router.post("/detail", (req, res) => {
   Article.findById(req.body._id)
     .populate("gambar")
